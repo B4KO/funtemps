@@ -4,6 +4,8 @@ import (
 	"flag"
 	"fmt"
 	"funtemps/conv"
+	"os"
+	"strings"
 )
 
 // Definerer flag-variablene i hoved-"scope"
@@ -14,11 +16,93 @@ var out string
 var funfact string
 var t string
 
+// Janis test
+func jannisTest() {
+	fmt.Println(fahr, out, funfact)
+
+	fmt.Println("len(flag.Args())", len(flag.Args()))
+	fmt.Println("flag.NFlag()", flag.NFlag())
+
+	fmt.Println(isFlagPassed("out"))
+
+	// Eksempel på enkel logikk
+	if out == "C" && isFlagPassed("F") {
+		// Kalle opp funksjonen FahrenheitToCelsius(fahr), som da
+		// skal returnere °C
+		fmt.Println("0°F er -17.78°C")
+	}
+}
+
+func setToUpper(out string, funfact string, t string) {
+	out = strings.ToUpper(out)
+	funfact = strings.ToUpper(funfact)
+	t = strings.ToUpper(t)
+}
+
+func validateFlags() bool {
+	if flag.NFlag() != 2 {
+		return false
+	}
+	if len(flag.Args()) != 2 {
+		return false
+	}
+
+	FirstFlags := []string{"F", "C", "K", "funfacts"}
+	SecondFlags := []string{"out", "t"}
+	strikes := 0
+
+	for _, ele := range FirstFlags {
+		if isFlagPassed(ele) {
+			strikes += 1
+		}
+		if strikes >= 2 {
+			return false
+		}
+	}
+
+	for _, ele := range SecondFlags {
+		if isFlagPassed(ele) {
+			strikes += 1
+		}
+		if strikes > 1 {
+			return false
+		}
+	}
+
+	for _, ele := range FirstFlags {
+		if isFlagPassed(ele) {
+			for _, eleTwo := range SecondFlags {
+				if isFlagPassed(eleTwo) {
+					if (ele == "K" || ele == "C" || ele == "F") && eleTwo == "out" {
+						return true
+					}
+					if ele == "funfact" && eleTwo == "t" {
+						return true
+					}
+				}
+			}
+		}
+	}
+
+	return false
+
+}
+
+func stringInSlice(a string, list []string) bool {
+	for _, b := range list {
+		if b == a {
+			return true
+		}
+	}
+	return false
+}
+
 // Bruker init (som anbefalt i dokumentasjonen) for å sikre at flagvariablene
 // er initialisert.
 func init() {
 
 	os.Setenv("GO111MODULE ", "on")
+	validateFlags()
 	/*
 	   Her er eksempler på hvordan man implementerer parsing av flagg.
 	   For eksempel, kommando
@@ -41,6 +125,61 @@ func init() {
 func main() {
 
 	flag.Parse()
+	setToUpper(out, funfact, t)
+
+	switch {
+	case fahr != 0.0:
+		from := fahr
+		switch out {
+		case "C":
+			to := conv.FarhenheitToCelsius(from)
+			fmt.Printf("%f°F er %f°C \n", from, to)
+		case "K":
+			to := conv.FarhenheitToKelvin(from)
+			fmt.Printf("%f°F er %fK \n", from, to)
+		case "F":
+			to := fahr
+			fmt.Printf("%f°F er %f°F \n", from, to)
+		}
+	case cel != 0.0:
+		from := cel
+		switch out {
+		case "C":
+			to := cel
+			fmt.Printf("%f°C er %f°C \n", from, to)
+		case "K":
+			to := conv.CelciusToKelvin(from)
+			fmt.Printf("%f°C er %fK \n", from, to)
+		case "F":
+			to := conv.CelciusToFarenheit(from)
+			fmt.Printf("%f°C er %f°F \n", from, to)
+		}
+	case kelv != 0.0:
+		from := kelv
+		switch out {
+		case "C":
+			to := conv.KelvinToCelcius(from)
+			fmt.Printf("%fK er %f°C \n", from, to)
+		case "K":
+			to := kelv
+			fmt.Printf("%fK er %fK \n", from, to)
+		case "F":
+			to := conv.KelvinToFarhenheit(from)
+			fmt.Printf("%fK er %f°F \n", from, to)
+		}
+	}
+
+	switch funfact {
+	case "SUN":
+	case "TERRA":
+	case "LUNA":
+	}
+
+	switch t {
+	case "C":
+	case "K":
+	case "F":
+	}
 
 	/**
 	    Her må logikken for flaggene og kall til funksjoner fra conv og funfacts
@@ -48,7 +187,7 @@ func main() {
 
 	    Det er anbefalt å sette opp en tabell med alle mulige kombinasjoner
 	    av flagg. flag-pakken har funksjoner som man kan bruke for å teste
-	    hvor mange flagg og argumenter er spesifisert på kommandolinje.
+	    hvor mange flagg og argumeniter er spesifsert på kommandolinje.
 
 	        fmt.Println("len(flag.Args())", len(flag.Args()))
 			    fmt.Println("flag.NFlag()", flag.NFlag())
@@ -66,19 +205,6 @@ func main() {
 	*/
 
 	// Her er noen eksempler du kan bruke i den manuelle testingen
-	fmt.Println(fahr, out, funfact)
-
-	fmt.Println("len(flag.Args())", len(flag.Args()))
-	fmt.Println("flag.NFlag()", flag.NFlag())
-
-	fmt.Println(isFlagPassed("out"))
-
-	// Eksempel på enkel logikk
-	if out == "C" && isFlagPassed("F") {
-		// Kalle opp funksjonen FahrenheitToCelsius(fahr), som da
-		// skal returnere °C
-		fmt.Println("0°F er -17.78°C")
-	}
 
 }
 
