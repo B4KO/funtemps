@@ -4,87 +4,22 @@ import (
 	"flag"
 	"fmt"
 	"funtemps/conv"
-	"math"
+	"funtemps/functions"
 	"os"
-	"strings"
-	"golang.org/x/text/message"
-	"golang.org/x/text/language"
 )
 
-var fahr float64
-var cel float64
-var kelv float64
-var out string
+var fahrArg float64
+var celArg float64
+var kelvArg float64
+var outArg string
 var funfactArg string
 var t string
 
-
-func formatFloat(val float64) string {
-	num := val;
-	num = roundFloat(num, 2);
-
-	if (math.Mod(num, 1) == 0.00 || math.Mod(num, 1) == -0.00)  {
-		num := int(num);
-		p := message.NewPrinter(language.English)
-		s := strings.Replace(p.Sprintf("%d", num),","," ",-1)
-
-		return s;
-	}
-
-	p := message.NewPrinter(language.English)
-	s := strings.Replace(p.Sprintf("%d", num),","," ",-1)
-
-	return s;
-
-}
-
-func roundFloat(val float64, precision uint) float64 {
-	ratio := math.Pow(10, float64(precision))
-	return math.Round(val*ratio) / ratio
-}
-
-func setToUpper(out string, funfact string, t string) {
-	out = strings.ToUpper(out)
-	funfact = strings.ToUpper(funfact)
-	t = strings.ToUpper(t)
-}
-
-// Validerer flaggene
-func validateFlags(arguments []string) bool {
-
-	//Ser om riktig antall flag og argumenter blir passert
-	if flag.NFlag() != 2 {
-		return false
-	}
-	if len(flag.Args()) != 2 {
-		return false
-	}
-
-	//Deffinerer de riktige flaggene i første og andre slot
-	FirstFlags := []string{"-F", "-C", "-K", "-funfacts"}
-	SecondFlags := []string{"-out", "-t"}
-
-	//Validerer om riktig kombinasjon av argumenter blir passert
-	if arguments[0] == FirstFlags[0] || arguments[0] == FirstFlags[1] || arguments[0] == FirstFlags[2] {
-		if arguments[2] == SecondFlags[0] {
-			return true
-		}
-	} else if arguments[1] == FirstFlags[3] {
-		if arguments[2] == SecondFlags[1] {
-			return true
-		}
-	}
-	return false
-}
-
 func init() {
-
-	//os.Setenv("GO111MODULE ", "on")
-
-	flag.Float64Var(&fahr, "F", 0.0, "temperatur i grader fahrenheit")
-	flag.Float64Var(&cel, "C", 0.0, "temperatur i grader celsius")
-	flag.Float64Var(&kelv, "K", 0.0, "temperatur i grader kelvin")
-	flag.StringVar(&out, "out", "", "beregne temperatur i C - celsius, F - farhenheit, K- Kelvin")
+	flag.Float64Var(&fahrArg, "F", 0.0, "temperatur i grader fahrenheit")
+	flag.Float64Var(&celArg, "C", 0.0, "temperatur i grader celsius")
+	flag.Float64Var(&kelvArg, "K", 0.0, "temperatur i grader kelvin")
+	flag.StringVar(&outArg, "out", "", "beregne temperatur i C - celsius, F - farhenheit, K- Kelvin")
 	flag.StringVar(&funfactArg, "funfacts", "", "\"fun-facts\" om sun - Solen, luna - Månen og terra - Jorden")
 	flag.StringVar(&t, "t", "", "\"fun-facts\" sin temperatur")
 }
@@ -93,43 +28,43 @@ func main() {
 
 	flag.Parse()
 
-	//Normaliserer output slik at folk kan passsere små og store bokstaver uten feil
-	setToUpper(out, funfactArg, t)
+	//Normaliserer output slik at folk kan passsere små og store bokstaver uten å få feil
+	functions.SetToUpper(outArg, funfactArg, t)
 
-	//Sender inn alle argumentene passert utenom første som er program navnet
-	if !validateFlags(os.Args[1:]) {
-		//Slutter programmet om feil blir inputtet
+	//Sender inn alle argumentene passert, utenom program navnet
+	if !functions.ValidateFlags(os.Args[1:]) {
+		//Avslutter programmet
 		os.Exit(0)
 	}
 
 	switch {
 
 	case isFlagPassed("F"):
-		from := fahr
+		from := fahrArg
 		switch isFlagPassed("out") {
-		case out == "C":
+		case outArg == "C":
 			to := conv.FarhenheitToCelsius(from)
 			fmt.Printf("%f°F er %f°C \n", from, to)
-		case out == "K":
+		case outArg == "K":
 			to := conv.FarhenheitToKelvin(from)
 			fmt.Printf("%f°F er %fK \n", from, to)
-		case out == "F":
-			to := fahr
+		case outArg == "F":
+			to := fahrArg
 			fmt.Printf("%f°F er %f°F \n", from, to)
 		default:
 			fmt.Printf("Passer gyldige arguenter og flagg \n")
 		}
 
 	case isFlagPassed("C"):
-		from := cel
+		from := celArg
 		switch isFlagPassed("out") {
-		case out == "C":
-			to := cel
+		case outArg == "C":
+			to := celArg
 			fmt.Printf("%f°C er %f°C \n", from, to)
-		case out == "K":
+		case outArg == "K":
 			to := conv.CelciusToKelvin(from)
 			fmt.Printf("%f°C er %fK \n", from, to)
-		case out == "F":
+		case outArg == "F":
 			to := conv.CelciusToFarenheit(from)
 			fmt.Printf("%f°C er %f°F \n", from, to)
 		default:
@@ -137,15 +72,15 @@ func main() {
 		}
 
 	case isFlagPassed("K"):
-		from := kelv
+		from := kelvArg
 		switch isFlagPassed("out") {
-		case out == "C":
+		case outArg == "C":
 			to := conv.KelvinToCelcius(from)
 			fmt.Printf("%fK er %f°C \n", from, to)
-		case out == "K":
-			to := kelv
+		case outArg == "K":
+			to := kelvArg
 			fmt.Printf("%fK er %fK \n", from, to)
-		case out == "F":
+		case outArg == "F":
 			to := conv.KelvinToFarhenheit(from)
 			fmt.Printf("%fK er %f°F \n", from, to)
 		default:
@@ -153,14 +88,10 @@ func main() {
 		}
 
 	case isFlagPassed("funfact"):
-		case funfactArg == "SUN":
-
-
-
+	case funfactArg == "SUN":
 
 	default:
 		fmt.Printf("Passer gyldige arguenter og flagg \n")
-
 
 	}
 
@@ -176,13 +107,13 @@ func isFlagPassed(name string) bool {
 	return found
 }
 
-switch isFlagPassed("t") {
-case t == "C":
-funfacts.GetFunFacts("SUN")
-case t == "F":
-funfacts.GetFunFacts("LUNA")
-case t == "K":
-funfacts.GetFunFacts("TERRA")
-default:
-fmt.Println("Passer gyldige argumenter og flagg \n")
-}
+//switch isFlagPassed("t") {
+//case t == "C":
+//funfacts.GetFunFacts("SUN")
+//case t == "F":
+//funfacts.GetFunFacts("LUNA")
+//case t == "K":
+//funfacts.GetFunFacts("TERRA")
+//default:
+//fmt.Println("Passer gyldige argumenter og flagg \n")
+//}
