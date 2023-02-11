@@ -43,13 +43,13 @@ func main() {
 		from := fahrArg
 		switch isFlagPassed("out") {
 		case outArg == "C":
-			to := conv.FarhenheitToCelsius(from)
+			to := functions.FormatFloat(conv.FarhenheitToCelsius(from))
 			fmt.Printf("%f°F er %f°C \n", from, to)
 		case outArg == "K":
-			to := conv.FarhenheitToKelvin(from)
+			to := functions.FormatFloat(conv.FarhenheitToKelvin(from))
 			fmt.Printf("%f°F er %fK \n", from, to)
 		case outArg == "F":
-			to := fahrArg
+			to := functions.FormatFloat(fahrArg)
 			fmt.Printf("%f°F er %f°F \n", from, to)
 		default:
 			fmt.Printf("Passer gyldige arguenter og flagg \n")
