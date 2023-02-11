@@ -4,8 +4,11 @@ import (
 	"flag"
 	"fmt"
 	"funtemps/conv"
+	"math"
 	"os"
 	"strings"
+	"golang.org/x/text/message"
+	"golang.org/x/text/language"
 )
 
 var fahr float64
@@ -15,20 +18,29 @@ var out string
 var funfactArg string
 var t string
 
-func jannisTest() {
-	fmt.Println(fahr, out, funfactArg)
 
-	fmt.Println("len(flag.Args())", len(flag.Args()))
-	fmt.Println("flag.NFlag()", flag.NFlag())
+func formatFloat(val float64) string {
+	num := val;
+	num = roundFloat(num, 2);
 
-	fmt.Println(isFlagPassed("out"))
+	if (math.Mod(num, 1) == 0.00 || math.Mod(num, 1) == -0.00)  {
+		num := int(num);
+		p := message.NewPrinter(language.English)
+		s := strings.Replace(p.Sprintf("%d", num),","," ",-1)
 
-	// Eksempel på enkel logikk
-	if out == "C" && isFlagPassed("F") {
-		// Kalle opp funksjonen FahrenheitToCelsius(fahr), som da
-		// skal returnere °C
-		fmt.Println("0°F er -17.78°C")
+		return s;
 	}
+
+	p := message.NewPrinter(language.English)
+	s := strings.Replace(p.Sprintf("%d", num),","," ",-1)
+
+	return s;
+
+}
+
+func roundFloat(val float64, precision uint) float64 {
+	ratio := math.Pow(10, float64(precision))
+	return math.Round(val*ratio) / ratio
 }
 
 func setToUpper(out string, funfact string, t string) {
