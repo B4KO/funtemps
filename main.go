@@ -44,13 +44,13 @@ func main() {
 		switch isFlagPassed("out") {
 		case outArg == "C":
 			to := functions.FormatFloat(conv.FarhenheitToCelsius(from))
-			fmt.Printf("%f°F er %f°C \n", from, to)
+			fmt.Printf("%f°F er %s°C \n", from, to)
 		case outArg == "K":
 			to := functions.FormatFloat(conv.FarhenheitToKelvin(from))
-			fmt.Printf("%f°F er %fK \n", from, to)
+			fmt.Printf("%f°F er %sK \n", from, to)
 		case outArg == "F":
 			to := functions.FormatFloat(fahrArg)
-			fmt.Printf("%f°F er %f°F \n", from, to)
+			fmt.Printf("%f°F er %s°F \n", from, to)
 		default:
 			fmt.Printf("Passer gyldige arguenter og flagg \n")
 		}
@@ -59,14 +59,14 @@ func main() {
 		from := celArg
 		switch isFlagPassed("out") {
 		case outArg == "C":
-			to := celArg
-			fmt.Printf("%f°C er %f°C \n", from, to)
+			to := functions.FormatFloat(celArg)
+			fmt.Printf("%f°C er %s°C \n", from, to)
 		case outArg == "K":
-			to := conv.CelciusToKelvin(from)
-			fmt.Printf("%f°C er %fK \n", from, to)
+			to := functions.FormatFloat(conv.CelciusToKelvin(from))
+			fmt.Printf("%f°C er %sK \n", from, to)
 		case outArg == "F":
-			to := conv.CelciusToFarenheit(from)
-			fmt.Printf("%f°C er %f°F \n", from, to)
+			to := functions.FormatFloat(conv.CelciusToFarenheit(from))
+			fmt.Printf("%f°C er %s°F \n", from, to)
 		default:
 			fmt.Printf("Passer gyldige arguenter og flagg \n")
 		}
@@ -75,23 +75,23 @@ func main() {
 		from := kelvArg
 		switch isFlagPassed("out") {
 		case outArg == "C":
-			to := conv.KelvinToCelcius(from)
-			fmt.Printf("%fK er %f°C \n", from, to)
+			to := functions.FormatFloat(conv.KelvinToCelcius(from))
+			fmt.Printf("%fK er %s°C \n", from, to)
 		case outArg == "K":
-			to := kelvArg
-			fmt.Printf("%fK er %fK \n", from, to)
+			to := functions.FormatFloat(kelvArg)
+			fmt.Printf("%fK er %sK \n", from, to)
 		case outArg == "F":
-			to := conv.KelvinToFarhenheit(from)
-			fmt.Printf("%fK er %f°F \n", from, to)
+			to := functions.FormatFloat(conv.KelvinToFarhenheit(from))
+			fmt.Printf("%fK er %s°F \n", from, to)
 		default:
 			fmt.Printf("Passer gyldige arguenter og flagg \n")
 		}
 
-	case isFlagPassed("funfact"):
-	case funfactArg == "SUN":
-
-	default:
-		fmt.Printf("Passer gyldige arguenter og flagg \n")
+		//case isFlagPassed("funfact"):
+		//case funfactArg == "SUN":
+		//
+		//default:
+		//	fmt.Printf("Passer gyldige arguenter og flagg \n")
 
 	}
 

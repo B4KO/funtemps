@@ -44,9 +44,6 @@ func ValidateFlags(arguments []string) bool {
 	if flag.NFlag() != 2 {
 		return false
 	}
-	if len(flag.Args()) != 2 {
-		return false
-	}
 
 	//Deffinerer de riktige flaggene i første og andre slot
 	FirstFlags := []string{"-F", "-C", "-K", "-funfacts"}
