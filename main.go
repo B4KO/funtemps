@@ -44,15 +44,16 @@ func main() {
 		switch isFlagPassed("out") {
 		case outArg == "C":
 			to := functions.FormatFloat(conv.FarhenheitToCelsius(from))
-			fmt.Printf("%f°F er %s°C \n", from, to)
+			fmt.Printf("%s°F er %s°C \n", os.Args[2], to)
 		case outArg == "K":
 			to := functions.FormatFloat(conv.FarhenheitToKelvin(from))
-			fmt.Printf("%f°F er %sK \n", from, to)
+			fmt.Printf("%s°F er %sK \n", os.Args[2], to)
 		case outArg == "F":
 			to := functions.FormatFloat(fahrArg)
-			fmt.Printf("%f°F er %s°F \n", from, to)
+			fmt.Printf("%s°F er %s°F \n", os.Args[2], to)
 		default:
 			fmt.Printf("Passer gyldige arguenter og flagg \n")
+			os.Exit(0)
 		}
 
 	case isFlagPassed("C"):
@@ -60,15 +61,16 @@ func main() {
 		switch isFlagPassed("out") {
 		case outArg == "C":
 			to := functions.FormatFloat(celArg)
-			fmt.Printf("%f°C er %s°C \n", from, to)
+			fmt.Printf("%s°C er %s°C \n", os.Args[2], to)
 		case outArg == "K":
 			to := functions.FormatFloat(conv.CelciusToKelvin(from))
-			fmt.Printf("%f°C er %sK \n", from, to)
+			fmt.Printf("%s°C er %sK \n", os.Args[2], to)
 		case outArg == "F":
 			to := functions.FormatFloat(conv.CelciusToFarenheit(from))
-			fmt.Printf("%f°C er %s°F \n", from, to)
+			fmt.Printf("%s°C er %s°F \n", os.Args[2], to)
 		default:
 			fmt.Printf("Passer gyldige arguenter og flagg \n")
+			os.Exit(0)
 		}
 
 	case isFlagPassed("K"):
@@ -76,15 +78,16 @@ func main() {
 		switch isFlagPassed("out") {
 		case outArg == "C":
 			to := functions.FormatFloat(conv.KelvinToCelcius(from))
-			fmt.Printf("%fK er %s°C \n", from, to)
+			fmt.Printf("%sK er %s°C \n", os.Args[2], to)
 		case outArg == "K":
 			to := functions.FormatFloat(kelvArg)
-			fmt.Printf("%fK er %sK \n", from, to)
+			fmt.Printf("%sK er %sK \n", os.Args[2], to)
 		case outArg == "F":
 			to := functions.FormatFloat(conv.KelvinToFarhenheit(from))
-			fmt.Printf("%fK er %s°F \n", from, to)
+			fmt.Printf("%sK er %s°F \n", os.Args[2], to)
 		default:
 			fmt.Printf("Passer gyldige arguenter og flagg \n")
+			os.Exit(0)
 		}
 
 		//case isFlagPassed("funfact"):
