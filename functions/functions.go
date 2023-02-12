@@ -10,18 +10,17 @@ import (
 
 func FormatFloat(val float64) string {
 	num := val
-	num = RoundFloat(num, 2)
 
 	if math.Mod(num, 1) == 0.00 || math.Mod(num, 1) == -0.00 {
 		num := int(num)
 		p := message.NewPrinter(language.English)
-		s := strings.Replace(p.Sprintf("%d", num), ",", " ", -1)
+		s := strings.Replace(p.Sprintf("%.2d", num), ",", " ", -1)
 
 		return s
 	}
 
 	p := message.NewPrinter(language.English)
-	s := strings.Replace(p.Sprintf("%d", num), ",", " ", -1)
+	s := strings.Replace(p.Sprintf("%.2f", num), ",", " ", -1)
 
 	return s
 
