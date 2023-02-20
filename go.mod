@@ -1,4 +1,4 @@
-module funtemps
+module github.com/B4KO/funtemps
 
 go 1.19
 

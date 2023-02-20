@@ -3,9 +3,10 @@ package main
 import (
 	"flag"
 	"fmt"
-	"funtemps/conv"
-	"funtemps/functions"
 	"os"
+
+	"github.com/B4KO/funtemps/conv"
+	"github.com/B4KO/funtemps/functions"
 )
 
 var fahrArg float64

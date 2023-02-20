@@ -1,6 +1,6 @@
 package conv
 
-import "funtemps/functions"
+import "github.com/B4KO/funtemps/functions"
 
 func FarhenheitToCelsius(value float64) float64 {
 	return functions.RoundFloat((value-32.0)*(5.0/9.0), 2)
